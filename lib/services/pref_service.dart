@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:prefdemo/model/account_model.dart';
 import 'package:prefdemo/model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -40,4 +41,24 @@ class Prefs {
     return prefs.remove("user");
   }
 
+  // for account
+static storeAccount(Account account) async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String stringAccount = jsonEncode(account);
+  prefs.setString('account', stringAccount);
+  }
+
+  static Future<Account> loadAccount()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String stringAccount = prefs.getString('account');
+    if(stringAccount == null || stringAccount.isEmpty) return null;
+
+    Map map = jsonDecode(stringAccount);
+    return Account.fromJson(map);
+  }
+
+  static Future<bool> removeAccount() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.remove("account");
+  }
 }
